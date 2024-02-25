@@ -14,7 +14,6 @@ import (
 // вызывается функция fn. Она служит для подсчёта количества и суммы
 // сгенерированных чисел.
 func Generator(ctx context.Context, ch chan<- int64, fn func(int64)) {
-	// 1. Функция Generator
 	number := int64(1)
 	defer close(ch)
 	for {
@@ -31,7 +30,6 @@ func Generator(ctx context.Context, ch chan<- int64, fn func(int64)) {
 
 // Worker читает число из канала in и пишет его в канал out.
 func Worker(in <-chan int64, out chan<- int64) {
-	// 2. Функция Worker
 	defer close(out)
 	for v := range in {
 		out <- v
@@ -79,9 +77,7 @@ func main() {
 		go func(i int, ch <-chan int64) {
 			defer wg.Done()
 			for v := range ch {
-				mu.Lock()
 				amounts[i]++
-				mu.Unlock()
 				chOut <- v
 			}
 		}(i, out)
